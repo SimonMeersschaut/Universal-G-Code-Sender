@@ -184,7 +184,7 @@ public class GrblOverrideManager extends AbstractOverrideManager implements IOve
 
     @Override
     public List<OverrideType> getToggleTypes() {
-        return List.of(OverrideType.SPINDLE_TOGGLE, OverrideType.MIST_TOGGLE, OverrideType.FLOOD_TOGGLE);
+        return List.of(OverrideType.SPINDLE_TOGGLE);
     }
 
     @Override
