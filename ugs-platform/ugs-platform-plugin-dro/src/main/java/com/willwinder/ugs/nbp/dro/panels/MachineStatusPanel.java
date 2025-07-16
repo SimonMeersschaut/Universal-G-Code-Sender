@@ -70,8 +70,8 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
     private final RoundedPanel activeStatePanel = new RoundedPanel(COMMON_RADIUS);
     private final JLabel activeStateValueLabel = new JLabel(" ");
 
-    private final JLabel feedValue = new JLabel("0");
-    private final JLabel spindleSpeedValue = new JLabel("0");
+    private final JLabel temperatureValue = new JLabel("-");
+    // private final JLabel spindleSpeedValue = new JLabel("0");
 
     private final JLabel gStatesLabel = new JLabel();
 
@@ -140,18 +140,19 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
         Stream.of(Axis.values()).forEach(this::initializeAxisPanel);
         add(axisPanel, PANEL_CONSTRAINTS);
 
-        // show feed rate
-        JPanel speedPanel = new JPanel(new MigLayout(debug + "fillx, wrap 2, inset 0", "[al right][]"));
-        speedPanel.setOpaque(false);
-        JLabel feedLabel = new JLabel(Localization.getString("gcode.setting.feed"));
-        speedPanel.add(feedLabel);
-        speedPanel.add(feedValue, "pad 2 0 0 0");
+        // show temperature
+        JPanel temperaturePanel = new JPanel(new MigLayout(debug + "fillx, wrap 2, inset 0", "[al right][]"));
+        temperaturePanel.setOpaque(false);
+        JLabel temperatureLabel = new JLabel(Localization.getString("gcode.setting.temperature"));
+        temperaturePanel.add(temperatureLabel);
+        temperaturePanel.add(temperatureValue, "pad 2 0 0 0");
+        add(temperaturePanel);
         
         // show spindle
-        JLabel spindleSpeedLabel = new JLabel(Localization.getString("overrides.spindle.short"));
-        speedPanel.add(spindleSpeedLabel);
-        speedPanel.add(spindleSpeedValue, "pad 2 0 0 0");
-        add(speedPanel, PANEL_CONSTRAINTS);
+        // JLabel spindleSpeedLabel = new JLabel(Localization.getString("overrides.spindle.short"));
+        // speedPanel.add(spindleSpeedLabel);
+        // speedPanel.add(spindleSpeedValue, "pad 2 0 0 0");
+        // add(speedPanel, PANEL_CONSTRAINTS);
 
         add(gStatesLabel, "align center");
 
@@ -161,11 +162,11 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
         resetStatePinComponents();
         pinStatePanel.add(pinStatesLabel);
         add(pinStatePanel, "align center");
-        setAllCaps(feedLabel, feedValue, spindleSpeedLabel, spindleSpeedValue);
+        setAllCaps(temperatureLabel, temperatureValue);
 
         fontManager.addActiveStateLabel(activeStateValueLabel);
-        fontManager.addPropertyLabel(feedLabel, spindleSpeedLabel, pinStatesLabel, gStatesLabel);
-        fontManager.addSpeedLabel(feedValue, spindleSpeedValue);
+        // fontManager.addPropertyLabel(feedLabel, spindleSpeedLabel, pinStatesLabel, gStatesLabel);
+        fontManager.addSpeedLabel(temperatureValue);
         fontManager.applyFonts(0);
     }
 
@@ -249,6 +250,11 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
         }
     }
 
+    /*
+     * This function will be called when the controller
+     * sends a status-update. This function will update
+     * the labels based on this status.
+     */
     private void onControllerStatusReceived(ControllerStatus status) {
         this.updateStatePanel(status.getState());
         resetStatePinComponents();
@@ -275,12 +281,12 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
         int feedSpeed = status.getFeedSpeed() != null
                 ? (int) (status.getFeedSpeed() * UnitUtils.scaleUnits(status.getFeedSpeedUnits(), backend.getSettings().getPreferredUnits()))
                 : (int) this.backend.getGcodeState().feedRate;
-        this.feedValue.setText(Integer.toString(feedSpeed));
+        this.temperatureValue.setText(Integer.toString(feedSpeed));
 
-        int spindleSpeed = status.getSpindleSpeed() != null
-                ? status.getSpindleSpeed().intValue()
-                : (int) this.backend.getGcodeState().spindleSpeed;
-        this.spindleSpeedValue.setText(Integer.toString(spindleSpeed));
+        // int spindleSpeed = status.getSpindleSpeed() != null
+        //         ? status.getSpindleSpeed().intValue()
+        //         : (int) this.backend.getGcodeState().spindleSpeed;
+        // this.spindleSpeedValue.setText(Integer.toString(spindleSpeed));
 
         GcodeState state = backend.getGcodeState();
         if (state == null) {
