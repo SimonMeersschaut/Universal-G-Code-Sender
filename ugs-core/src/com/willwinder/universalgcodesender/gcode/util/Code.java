@@ -44,7 +44,7 @@ public enum Code {
     /**
      * Rapid linear movement
      */
-    G0(Motion, false, true),
+    G0(Motion, false, true, "Rapid"),
 
     /**
      * Rapid movement
@@ -70,7 +70,7 @@ public enum Code {
     G88(Motion),
     G89(Motion),
 
-    G17(Plane),
+    G17(Plane, "XY plane"),
     G18(Plane),
     G19(Plane),
     G17_1(Plane),
@@ -80,7 +80,7 @@ public enum Code {
     /**
      * Absolute movement
      */
-    G90(Distance),
+    G90(Distance, "Absolute"),
 
     /**
      * Relative movement
@@ -91,11 +91,11 @@ public enum Code {
     G91_1(Arc),
 
     G93(Feedmode),
-    G94(Feedmode),
+    G94(Feedmode, "feed/min"),
     G95(Feedmode),
 
     G20(Units),
-    G21(Units),
+    G21(Units, "mm"),
 
     G40(Cutter),
     G41(Cutter),
@@ -110,7 +110,7 @@ public enum Code {
     G98(CannedCycle),
     G99(CannedCycle),
 
-    G54(WCS),
+    G54(WCS, "rel to home"),
     G55(WCS),
     G56(WCS),
     G57(WCS),
@@ -184,17 +184,38 @@ public enum Code {
     private final ModalGroup type;
     private final boolean nonModalMotionCode;
     private final boolean motionOptional;
+    private final String shortMeaning; // if no meaning has been asigned yet, set to null.
 
     Code(ModalGroup type){
         this.type = type;
         this.nonModalMotionCode = false;
         this.motionOptional = false;
+        this.shortMeaning = null;
     }
 
     Code(ModalGroup type, boolean nonModalMotionCode, boolean motionOptional){
         this.type = type;
         this.nonModalMotionCode = nonModalMotionCode;
         this.motionOptional = motionOptional;
+        this.shortMeaning = null;
+    }
+
+    /*
+     * Constructors with short meaning
+     */
+
+    Code(ModalGroup type, String shortMeaning){
+        this.type = type;
+        this.nonModalMotionCode = false;
+        this.motionOptional = false;
+        this.shortMeaning = shortMeaning;
+    }
+
+    Code(ModalGroup type, boolean nonModalMotionCode, boolean motionOptional, String shortMeaning){
+        this.type = type;
+        this.nonModalMotionCode = nonModalMotionCode;
+        this.motionOptional = motionOptional;
+        this.shortMeaning = shortMeaning;
     }
 
     public boolean consumesMotion() {
@@ -215,6 +236,17 @@ public enum Code {
 
     public ModalGroup getType(){
         return this.type;
+    }
+
+    /*
+     * Returns the meaning of this gcode command.
+     * (or the code itself if no meaning has been set yet).
+     */
+    public String getShortMeaning(){
+        if (shortMeaning == null)
+            return toString();
+        else
+            return shortMeaning;
     }
 
     /**
@@ -242,4 +274,7 @@ public enum Code {
         Code c = codeLookup.get(type + rest);
         return c == null ? UNKNOWN : c;
     }
+
+    
+
 }
