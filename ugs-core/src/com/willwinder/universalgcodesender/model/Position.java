@@ -167,6 +167,15 @@ public class Position extends CNCPoint {
             case Z:
                 setZ(value);
                 break;
+            case A:
+                setA(value);
+                break;
+            case B:
+                setB(value);
+                break;
+            case C:
+                setC(value);
+                break;
             default:
         }
     }
