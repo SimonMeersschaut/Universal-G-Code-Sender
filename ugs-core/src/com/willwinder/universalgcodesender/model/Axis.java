@@ -25,11 +25,10 @@ package com.willwinder.universalgcodesender.model;
  */
 public enum Axis {
   // Cartesian
-  X, Y, Z,
+  X, Y, Z, A,
   // Rotation
-  A, // X
-  B, // Y
-  C  // Z
+  B, // unused
+  C  // unused
   ;
 
   public boolean isRotation() {
@@ -37,7 +36,7 @@ public enum Axis {
   }
 
   public boolean isLinear() {
-    return this == X || this == Y || this == Z;
+    return this == X || this == Y || this == Z || this == A;
   }
 }
 
