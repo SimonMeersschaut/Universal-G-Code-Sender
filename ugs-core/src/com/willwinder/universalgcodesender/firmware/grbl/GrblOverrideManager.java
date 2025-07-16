@@ -273,8 +273,11 @@ public class GrblOverrideManager extends AbstractOverrideManager implements IOve
 
     @Override
     public List<Integer> getSliderSteps(OverrideType type) {
-        if (type == OverrideType.FEED_SPEED || type == OverrideType.SPINDLE_SPEED) {
+        if (type == OverrideType.FEED_SPEED) {
             return List.of(0, 100, 200);
+        }
+        if (type == OverrideType.SPINDLE_SPEED) {
+            return List.of(0, 50, 100);
         }
         return List.of();
     }
