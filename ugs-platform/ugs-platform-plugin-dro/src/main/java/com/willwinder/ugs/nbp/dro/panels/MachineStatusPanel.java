@@ -73,7 +73,7 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
     private final JLabel temperatureValue = new JLabel("-");
     // private final JLabel spindleSpeedValue = new JLabel("0");
 
-    private final JLabel gStatesLabel = new JLabel();
+    private final JLabel gStatesLabel = new JLabel("-");
 
     private final RoundedPanel pinStatePanel = new RoundedPanel(COMMON_RADIUS);
     private final JLabel pinStatesLabel = new JLabel();
@@ -245,7 +245,7 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
             // don't hide every axis while capabilities are being detected.
             boolean visible = (cap.hasAxis(a) || a.isLinear()) && settings.isAxisEnabled(a);
             axisPanels.get(a).setEnabled(enabled);
-            axisPanels.get(a).setVisible(visible);
+            // axisPanels.get(a).setVisible(visible);
             axisPanels.get(a).setShowMachinePosition(settings.isShowMachinePosition());
         }
     }
@@ -263,7 +263,8 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
 
         this.setUnits(backend.getSettings().getPreferredUnits());
 
-        Arrays.stream(Axis.values())
+        // set new coordinates
+        Arrays.stream(Axis.values()) 
                 .filter(axisPanels::containsKey)
                 .forEach(axis -> {
                     if (status.getMachineCoord() != null) {
@@ -293,16 +294,18 @@ public class MachineStatusPanel extends JPanel implements UGSEventListener, Axis
             gStatesLabel.setText("--");
         } else {
             gStatesLabel.setText(
-                    String.join(" ",
-                            state.currentMotionMode.toString(),
-                            state.units.toString(),
-                            state.feedMode.toString(),
-                            state.distanceMode.toString(),
-                            state.offset.toString(),
-                            state.plane.code.toString()));
+                    String.join(", ",
+                            state.currentMotionMode.getShortMeaning(),
+                            state.units.getShortMeaning(),
+                            state.feedMode.getShortMeaning(),
+                            state.distanceMode.getShortMeaning(),
+                            state.offset.getShortMeaning(),
+                            state.plane.code.getShortMeaning()
+                    )
+            );
         }
     }
-
+        
     private void updatePinStates(ControllerStatus status) {
         if (status.getEnabledPins() == null) {
             return;
