@@ -31,7 +31,6 @@ import org.netbeans.spi.options.OptionsPanelController;
 )
 @org.openide.util.NbBundle.Messages({"AdvancedOption_DisplayName_CloudStorage=Cloud Storage", "AdvancedOption_Keywords_CloudStorage=s3, aws"})
 public final class CloudStorageOptionsPanelController extends AbstractOptionsPanelController {
-    @Override
     public AbstractUGSSettings initPanel() {
         return new CloudStorageSettingsPanel(settings, this);
     }
