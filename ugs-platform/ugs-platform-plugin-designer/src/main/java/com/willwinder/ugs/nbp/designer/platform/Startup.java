@@ -45,8 +45,10 @@ public class Startup implements Runnable {
         CentralLookup.getDefault().add(controller.getUndoManager());
         CentralLookup.getDefault().add(controller.getSelectionManager());
 
+        
         // Registers the file types that can be opened in UGSs
         FileFilterService fileFilterService = Lookup.getDefault().lookup(FileFilterService.class);
+        if (fileFilterService == null) throw new NullPointerException("`fileFilterService` was `null`. Perhaps try running `mvn clean install`.");
         fileFilterService.registerFileFilter(OpenAction.DESIGN_FILE_FILTER);
     }
 }

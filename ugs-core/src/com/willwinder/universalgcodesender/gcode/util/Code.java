@@ -36,7 +36,7 @@ public enum Code {
     G28_3(NonModal, true, true),
     G30(NonModal, true, true),
     G53(NonModal, false, false),
-    G92(NonModal, true, false),
+    G92(NonModal, true, true),
     G92_1(NonModal),
     G92_2(NonModal),
     G92_3(NonModal),

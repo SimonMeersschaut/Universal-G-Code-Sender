@@ -70,7 +70,7 @@ public final class OverridesPanel extends JPanel implements UGSEventListener {
 
     public void updateControls() {
         if (backend.getControllerState() == ControllerState.DISCONNECTED || backend.getControllerState() == ControllerState.CONNECTING) {
-            removeComponents(); // show not connected label
+            clearAndShowNotConnected();
             return;
         } else if (!backend.getController().getCapabilities().hasOverrides() || (backend.getController().getOverrideManager().getSliderTypes().isEmpty() && backend.getController().getOverrideManager().getToggleTypes().isEmpty())) {
             showNotSupportedPanel(); // show not suported label
@@ -125,7 +125,10 @@ public final class OverridesPanel extends JPanel implements UGSEventListener {
         }
     }
 
-    private void removeComponents() {
+    /*
+    Clear the panel and show a "not connected" message.
+    */
+    private void clearAndShowNotConnected() {
         overridesControlsPanel.removeAll();
         speedSliders.clear();
         overridesControlsPanel.setVisible(false);
@@ -157,13 +160,14 @@ public final class OverridesPanel extends JPanel implements UGSEventListener {
     }
 
     /*
-     * This function creates three toggle buttons: Spindle, Mist Coolant, Flood Cooland
+     * This function creates toggle buttons together with their
+     * labels for: Spindle, Mist Coolant and Flood Coolant.
      */
     private void createAndAddToggleButtons(IOverrideManager overrideManager) {
         if (overrideManager.getToggleTypes().isEmpty()) {
             return;
         }
-        overridesControlsPanel.add(new JLabel(TOGGLE_SHORT), "spanx, grow, wrap, gaptop 10"); // short lable
+        overridesControlsPanel.add(new JLabel(TOGGLE_SHORT), "spanx, grow, wrap, gaptop 10"); // short label
         overrideToggleButtons = new OverrideToggleButtons(overrideManager); // add three toggle buttons
         overridesControlsPanel.add(overrideToggleButtons, "growx, w 40::");
     }
